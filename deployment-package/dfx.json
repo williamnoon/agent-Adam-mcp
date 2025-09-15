@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "canisters": {
+    "AgentAdam": {
+      "main": "src/AgentAdam/main.mo",
+      "type": "motoko"
+    },
+    "frontend": {
+      "dependencies": [
+        "AgentAdam"
+      ],
+      "frontend": {
+        "entrypoint": "src/frontend/index.html"
+      },
+      "source": [
+        "src/frontend/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral"
+    }
+  }
+}

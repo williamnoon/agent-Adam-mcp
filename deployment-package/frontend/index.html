@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' *.gohighlevel.com *.highlevel.global;">
+    <title>Agent Adam - GoHighLevel AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Initial layout styles until styles.css is created */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1A1A1A;
+            color: #FFFFFF;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #FF6B00, #FF0000);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #quickActions {
+            background: #2A2A2A;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+        
+        main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        #messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        #inputArea {
+            background: #2A2A2A;
+            padding: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        #commandInput {
+            flex: 1;
+            background: #3A3A3A;
+            border: 1px solid #4A4A4A;
+            color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+        }
+        
+        #sendButton {
+            background: linear-gradient(135deg, #FF6B00, #FF0000);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        aside {
+            width: 250px;
+            background: #2A2A2A;
+            padding: 1rem;
+            border-left: 1px solid #3A3A3A;
+        }
+        
+        .quick-action {
+            background: #3A3A3A;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00FF00;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @media (max-width: 768px) {
+            aside {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div class="logo">
+                <h1>🤖 Agent Adam</h1>
+            </div>
+            <div id="status" class="status">
+                <span>Status:</span>
+                <div class="status-indicator"></div>
+                <span id="statusText">Online</span>
+            </div>
+        </header>
+        
+        <div id="quickActions">
+            <button class="quick-action" data-command="Show recent contacts">📋 Recent Contacts</button>
+            <button class="quick-action" data-command="Check workflow status">⚡ Workflows</button>
+            <button class="quick-action" data-command="Generate report">📊 Reports</button>
+            <button class="quick-action" data-command="Create new campaign">📧 New Campaign</button>
+            <button class="quick-action" data-command="View analytics">📈 Analytics</button>
+        </div>
+        
+        <main>
+            <section id="chatContainer">
+                <div id="messages">
+                    <div class="message message-adam">
+                        <div class="message-content">
+                            <p>👋 Hello! I'm Agent Adam, your GoHighLevel AI assistant. I can help you with:</p>
+                            <ul>
+                                <li>Managing contacts and workflows</li>
+                                <li>Creating and monitoring campaigns</li>
+                                <li>Generating reports and analytics</li>
+                                <li>Automating routine tasks</li>
+                            </ul>
+                            <p>Just tell me what you'd like to do!</p>
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+                
+                <div id="inputArea">
+                    <input 
+                        type="text" 
+                        id="commandInput" 
+                        placeholder="Ask me anything about your GoHighLevel account..."
+                        autocomplete="off"
+                    >
+                    <button id="sendButton">Send</button>
+                </div>
+            </section>
+            
+            <aside id="sidebar">
+                <div class="metrics">
+                    <h3>📊 Quick Stats</h3>
+                    <div class="metric">
+                        <span>Active Workflows:</span>
+                        <span id="activeWorkflows">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Total Contacts:</span>
+                        <span id="totalContacts">-</span>
+                    </div>
+                    <div class="metric">
+                        <span>Recent Commands:</span>
+                        <span id="recentCommands">-</span>
+                    </div>
+                </div>
+                
+                <div class="recent-activity">
+                    <h3>🕒 Recent Activity</h3>
+                    <div id="activityList">
+                        <div class="activity-item">
+                            <span>System initialized</span>
+                            <small>Just now</small>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
