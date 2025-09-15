@@ -5,6 +5,8 @@ import Text "mo:base/Text";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
 import Buffer "mo:base/Buffer";
+import Iter "mo:base/Iter";
+import Int "mo:base/Int";
 
 import Types "./Types";
 
@@ -22,23 +24,19 @@ actor AgentAdam {
     private stable var executionResults: [(Text, ExecutionResult)] = [];
     private stable var userPreferences: [(Text, UserPreference)] = [];
 
-    // Runtime state with HashMaps
-    private var commands = HashMap.HashMap<Text, Command>(10, Text.equal, Text.hash);
-    private var results = HashMap.HashMap<Text, ExecutionResult>(10, Text.equal, Text.hash);
-    private var preferences = HashMap.HashMap<Text, UserPreference>(10, Text.equal, Text.hash);
+    // Runtime state with HashMaps (marked as transient)
+    private transient var commands = HashMap.HashMap<Text, Command>(10, Text.equal, Text.hash);
+    private transient var results = HashMap.HashMap<Text, ExecutionResult>(10, Text.equal, Text.hash);
+    private transient var preferences = HashMap.HashMap<Text, UserPreference>(10, Text.equal, Text.hash);
 
     // System upgrade hooks
     system func preupgrade() {
-        commandHistory := commands.entries() |> Array.fromIter(_);
-        executionResults := results.entries() |> Array.fromIter(_);
-        userPreferences := preferences.entries() |> Array.fromIter(_);
+        commandHistory := Iter.toArray(commands.entries());
+        executionResults := Iter.toArray(results.entries());
+        userPreferences := Iter.toArray(preferences.entries());
     };
 
     system func postupgrade() {
-        commandHistory := [];
-        executionResults := [];
-        userPreferences := [];
-        
         commands := HashMap.fromIter<Text, Command>(
             commandHistory.vals(), 10, Text.equal, Text.hash
         );
@@ -48,6 +46,10 @@ actor AgentAdam {
         preferences := HashMap.fromIter<Text, UserPreference>(
             userPreferences.vals(), 10, Text.equal, Text.hash
         );
+        
+        commandHistory := [];
+        executionResults := [];
+        userPreferences := [];
     };
 
     // Public shared functions
@@ -73,7 +75,7 @@ actor AgentAdam {
         payload: Text, 
         locationId: Text
     ): async Result.Result<Text, Text> {
-        let commandId = Text.concat(webhookId, Int.toText(Time.now()));
+        let commandId = webhookId # "_" # Int.toText(Time.now());
         let command: Command = {
             id = commandId;
             source = #GHLWebhook({ webhookId; eventType });
@@ -99,7 +101,7 @@ actor AgentAdam {
         transcript: Text,
         locationId: Text
     ): async Result.Result<VoiceResponse, Text> {
-        let commandId = Text.concat(sessionId, Int.toText(Time.now()));
+        let commandId = sessionId # "_" # Int.toText(Time.now());
         let command: Command = {
             id = commandId;
             source = #GHLVoiceAgent({ sessionId; callerId });
@@ -133,7 +135,7 @@ actor AgentAdam {
         message: Text,
         locationId: Text
     ): async Result.Result<ChatResponse, Text> {
-        let commandId = Text.concat(conversationId, Int.toText(Time.now()));
+        let commandId = conversationId # "_" # Int.toText(Time.now());
         let command: Command = {
             id = commandId;
             source = #GHLChatAgent({ conversationId; contactId });
@@ -166,7 +168,7 @@ actor AgentAdam {
         locationId: Text,
         instruction: Text
     ): async Result.Result<AdminResponse, Text> {
-        let commandId = Text.concat(userId, Int.toText(Time.now()));
+        let commandId = userId # "_" # Int.toText(Time.now());
         let command: Command = {
             id = commandId;
             source = #AdminInterface({ userId; locationId });

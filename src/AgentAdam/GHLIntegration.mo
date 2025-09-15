@@ -4,6 +4,8 @@ import Buffer "mo:base/Buffer";
 import Result "mo:base/Result";
 import Time "mo:base/Time";
 import Option "mo:base/Option";
+import Int "mo:base/Int";
+import Nat "mo:base/Nat";
 
 import Types "./Types";
 
