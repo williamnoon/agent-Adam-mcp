@@ -10,7 +10,7 @@ import Int "mo:base/Int";
 
 import Types "./Types";
 
-actor AgentAdam {
+actor persistent AgentAdam {
     type Command = Types.Command;
     type ExecutionResult = Types.ExecutionResult;
     type VoiceResponse = Types.VoiceResponse;
