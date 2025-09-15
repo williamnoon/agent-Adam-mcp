@@ -10,7 +10,7 @@ import Int "mo:base/Int";
 
 import Types "./Types";
 
-actor persistent AgentAdam {
+actor AgentAdam {
     type Command = Types.Command;
     type ExecutionResult = Types.ExecutionResult;
     type VoiceResponse = Types.VoiceResponse;
@@ -24,10 +24,10 @@ actor persistent AgentAdam {
     private stable var executionResults: [(Text, ExecutionResult)] = [];
     private stable var userPreferences: [(Text, UserPreference)] = [];
 
-    // Runtime state with HashMaps (marked as transient)
-    private transient var commands = HashMap.HashMap<Text, Command>(10, Text.equal, Text.hash);
-    private transient var results = HashMap.HashMap<Text, ExecutionResult>(10, Text.equal, Text.hash);
-    private transient var preferences = HashMap.HashMap<Text, UserPreference>(10, Text.equal, Text.hash);
+    // Runtime state with HashMaps
+    private var commands = HashMap.HashMap<Text, Command>(10, Text.equal, Text.hash);
+    private var results = HashMap.HashMap<Text, ExecutionResult>(10, Text.equal, Text.hash);
+    private var preferences = HashMap.HashMap<Text, UserPreference>(10, Text.equal, Text.hash);
 
     // System upgrade hooks
     system func preupgrade() {
