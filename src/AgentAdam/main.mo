@@ -25,9 +25,9 @@ actor AgentAdam {
     private stable var userPreferences: [(Text, UserPreference)] = [];
 
     // Runtime state with HashMaps
-    private var commands = HashMap.HashMap<Text, Command>(10, Text.equal, Text.hash);
-    private var results = HashMap.HashMap<Text, ExecutionResult>(10, Text.equal, Text.hash);
-    private var preferences = HashMap.HashMap<Text, UserPreference>(10, Text.equal, Text.hash);
+    private transient var commands = HashMap.HashMap<Text, Command>(10, Text.equal, Text.hash);
+    private transient var results = HashMap.HashMap<Text, ExecutionResult>(10, Text.equal, Text.hash);
+    private transient var preferences = HashMap.HashMap<Text, UserPreference>(10, Text.equal, Text.hash);
 
     // System upgrade hooks
     system func preupgrade() {
